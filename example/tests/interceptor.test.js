@@ -1,5 +1,5 @@
 /*global page:true browser*/
-import { Element, Helpers, Interceptor } from "test-juggler";
+import { Element, goToUrlAndLoad, Interceptor } from "test-juggler";
 
 const DemoGuruSite = "http://demo.guru99.com/test/radio.html";
 const DemoOpenCartSite = "https://demo.opencart.com/";
@@ -70,7 +70,7 @@ describe("Interceptor", () => {
 
     it("should block any request during action", async () => {
         //Arrange
-        await Helpers.goToUrlAndLoad(DemoOpenCartSite);
+        await goToUrlAndLoad(DemoOpenCartSite);
         await page.on("dialog", dialog => {
             console.log(`Alert was detected: '${dialog.message()}'`);
             dialog.dismiss();
@@ -85,7 +85,7 @@ describe("Interceptor", () => {
 
     it("should count all requests", async () => {
         //Act
-        var totalRequests = await Interceptor.getAllRequestsData(Helpers.goToUrlAndLoad(DemoOpenCartSite));
+        var totalRequests = await Interceptor.getAllRequestsData(goToUrlAndLoad(DemoOpenCartSite));
 
         //Assert
         expect(totalRequests.length > 0).toBeTruthy();
@@ -95,7 +95,7 @@ describe("Interceptor", () => {
     it("should detect specific response after action", async () => {
         //Arrange
         const responsetUrlFragment = "cart/info";
-        await Helpers.goToUrlAndLoad(DemoOpenCartSite);
+        await goToUrlAndLoad(DemoOpenCartSite);
 
         //Act
         var responseAfterAction = await Interceptor.waitForResponseAfterAction(addToCartButton.click(), responsetUrlFragment);
@@ -109,7 +109,7 @@ describe("Interceptor", () => {
 
     it("should detect any request after action", async () => {
         //Arrange
-        await Helpers.goToUrlAndLoad(DemoOpenCartSite);
+        await goToUrlAndLoad(DemoOpenCartSite);
 
         //Act
         var requestAfterAction = await Interceptor.waitForRequestAfterAction(addToCartButton.click());

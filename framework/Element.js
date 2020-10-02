@@ -1,5 +1,5 @@
 /*global page document window*/
-import Helpers from "./helpers";
+import { takeScreenshot } from "./helpers";
 
 const config = require(process.cwd() + "/framework.config");
 const defaultTimeout = config.defaultTimeout;
@@ -22,7 +22,7 @@ export default class Element {
         console.log(`Waiting for ${this.selector} ...`);
         const elementHandle = await page.waitFor(this.selector, { timeout: timeout });
         if (config.captureScreenshots) {
-            await Helpers.takeScreenshot();
+            await takeScreenshot();
         }
         return elementHandle;
     }
@@ -31,7 +31,7 @@ export default class Element {
         console.log(`Waiting for ${this.selector} to be visible...`);
         const elementHandle = await page.waitFor(this.selector, { visible: true, timeout: timeout });
         if (config.captureScreenshots) {
-            await Helpers.takeScreenshot();
+            await takeScreenshot();
         }
         return elementHandle;
     }
@@ -40,7 +40,7 @@ export default class Element {
         console.log(`Waiting for ${this.selector} to be invisible...`);
         await page.waitFor(this.selector, { hidden: true, timeout: timeout });
         if (config.captureScreenshots) {
-            await Helpers.takeScreenshot();
+            await takeScreenshot();
         }
     }
 

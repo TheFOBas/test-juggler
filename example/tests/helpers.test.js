@@ -1,5 +1,5 @@
 /*global page:true browser*/
-import { Element, Helpers } from "test-juggler";
+import { Element, takeScreenshot, asyncRetry, goToUrlAndLoad, getFrame } from "test-juggler";
 const fs = require("fs");
 
 describe("Helpers", () => {
@@ -14,7 +14,7 @@ describe("Helpers", () => {
         const expectedFilePath = `./logs/Helpers/should take screenshot, save to logs folder and return filepath/${fileName}.png`;
 
         //Act
-        const actualFilePath = await Helpers.takeScreenshot(fileName);
+        const actualFilePath = await takeScreenshot(fileName);
 
         //Assert
         expect(actualFilePath).toBe(expectedFilePath);
@@ -26,7 +26,7 @@ describe("Helpers", () => {
         await page.goto("http://the-internet.herokuapp.com/");
 
         //Act
-        const actualFilePath = await Helpers.takeScreenshot();
+        const actualFilePath = await takeScreenshot();
 
         //Assert
         expect(actualFilePath).toContain(Date.now().toString().slice(0, -6));
@@ -40,7 +40,7 @@ describe("Helpers", () => {
 
         //Act
         await startButton.click();
-        await Helpers.retry(async () => {
+        await asyncRetry(async () => {
             await elementToLoad.click();
         });
 
@@ -54,7 +54,7 @@ describe("Helpers", () => {
         const progressLoader = new Element("html.nprogress-busy");
 
         //Act
-        await Helpers.goToUrlAndLoad("https://www.jqueryscript.net/demo/jQuery-Html5-Based-Preloader-Plugin-html5loader/");
+        await goToUrlAndLoad("https://www.jqueryscript.net/demo/jQuery-Html5-Based-Preloader-Plugin-html5loader/");
 
         //Assert
         await expect(progressLoader.exists()).resolves.toBeFalsy();
@@ -67,7 +67,7 @@ describe("Helpers", () => {
         await page.goto("http://the-internet.herokuapp.com/iframe");
 
         //Act
-        const frame = await Helpers.getFrame(iFrameSelector);
+        const frame = await getFrame(iFrameSelector);
         const textContent = await frame.$eval(textFrameSelector, element => element.textContent);
 
         //Assert
